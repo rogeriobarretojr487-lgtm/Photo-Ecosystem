@@ -1,11 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@400;500&display=swap');
+
 :root {
   --jovi: #1d4ae8;
+}
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
 }
 
 .text-jovi { color: var(--jovi); }
 .bg-jovi { background-color: var(--jovi); }
 .ring-jovi { --tw-ring-color: var(--jovi); }
 .border-jovi { border-color: var(--jovi); }
+
+/* Logo Jovi: caixa azul com a marca em branco, como no material oficial. */
+.logo {
+  display: inline-block;
+  background-color: var(--jovi);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+}
+
+/* "Photo ecosystem" em serifada, como nos slides da Sprint 1. */
+.wordmark {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: #94a3b8;
+}
+
+.titulo {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: -0.01em;
+}
 
 /* Malha de ruas do mapa (tela mapa.html) — desenhada em CSS, sem biblioteca externa. */
 .mapa-ruas {
