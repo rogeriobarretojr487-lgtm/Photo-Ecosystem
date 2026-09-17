@@ -12,7 +12,7 @@
   <header class="sticky top-0 z-10 bg-white border-b">
     <div class="max-w-2xl mx-auto flex items-center justify-between px-5 py-4">
       <a href="../index.html" class="logo">JOVI</a>
-      <a href="config.html" class="text-slate-400 text-sm">Configurações</a>
+      <a href="config.html" id="link-config" class="text-slate-400" aria-label="Configurações"></a>
     </div>
   </header>
 
@@ -23,13 +23,17 @@
       <div>
         <h1 id="nome" class="text-xl font-bold"></h1>
         <p id="usuario" class="text-slate-500 text-sm"></p>
-        <p id="cidade" class="text-slate-400 text-sm">&#128205; <span></span></p>
+        <p id="cidade" class="flex items-center gap-1.5 text-slate-400 text-sm"><span></span></p>
       </div>
     </section>
 
     <section id="stats" class="flex gap-10 py-6"></section>
 
-    <button id="seguir" class="w-full bg-jovi text-white rounded-full py-2.5 font-medium">Seguir</button>
+    <!-- Este é o perfil do próprio usuário (aba Perfil), então aqui não cabe "seguir". -->
+    <div class="flex gap-2">
+      <a href="config.html" class="flex-1 text-center bg-jovi text-white rounded-full py-2.5 font-medium">Editar perfil</a>
+      <button id="compartilhar" class="w-11 h-11 rounded-full border border-slate-200 text-slate-500 flex items-center justify-center" aria-label="Compartilhar perfil"></button>
+    </div>
 
     <section class="pt-8">
       <div class="flex items-baseline justify-between mb-3">
@@ -58,7 +62,9 @@
     document.getElementById('avatar').alt = PERFIL.nome;
     document.getElementById('nome').textContent = PERFIL.nome;
     document.getElementById('usuario').textContent = PERFIL.usuario;
-    document.querySelector('#cidade span').textContent = PERFIL.cidade;
+    document.getElementById('cidade').innerHTML = `${icone('local', 'w-4 h-4')}<span>${PERFIL.cidade}</span>`;
+    document.getElementById('compartilhar').innerHTML = icone('compartilhar');
+    document.getElementById('link-config').innerHTML = icone('ajustes', 'w-5 h-5');
 
     document.getElementById('stats').innerHTML = [
       ['Posts', PERFIL.posts],
@@ -79,14 +85,6 @@
     document.getElementById('fotos').innerHTML = GALERIA.fotos.map((f) => `
       <a href="galeria.html"><img src="${f.foto}" alt="Foto em ${GALERIA.local}" class="aspect-square w-full object-cover"></a>`).join('');
 
-    const botaoSeguir = document.getElementById('seguir');
-    botaoSeguir.addEventListener('click', () => {
-      const seguindo = botaoSeguir.textContent === 'Seguindo';
-      botaoSeguir.textContent = seguindo ? 'Seguir' : 'Seguindo';
-      botaoSeguir.className = seguindo
-        ? 'w-full bg-jovi text-white rounded-full py-2.5 font-medium'
-        : 'w-full bg-white text-jovi border border-jovi rounded-full py-2.5 font-medium';
-    });
   </script>
 </body>
 </html>

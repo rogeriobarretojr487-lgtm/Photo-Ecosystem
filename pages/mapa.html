@@ -19,7 +19,7 @@
   <main class="max-w-2xl mx-auto px-5 py-5">
 
     <label class="flex items-center gap-2 bg-white rounded-full px-4 py-3 shadow-sm">
-      <span class="text-slate-400">&#128269;</span>
+      <span id="icone-busca" class="text-slate-400"></span>
       <input type="search" placeholder="Buscar lugares, usuários, pontos turísticos..."
              class="w-full outline-none text-sm placeholder:text-slate-400">
     </label>
@@ -34,8 +34,8 @@
       <div class="absolute left-0 top-[58%] w-full h-6 bg-sky-100 -rotate-6"></div>
       <div id="pins" class="absolute inset-0"></div>
 
-      <button id="explorar" class="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-jovi text-white rounded-full px-5 py-2.5 text-sm shadow-lg">
-        &#9678; Explorar nesta área
+      <button id="explorar" class="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-jovi text-white rounded-full px-5 py-2.5 text-sm shadow-lg flex items-center gap-2">
+        <span id="icone-explorar"></span> Explorar nesta área
       </button>
     </section>
 
@@ -103,6 +103,9 @@
         <p class="text-sm text-slate-500">Mostrando resultados de "${filtro}".</p>`;
       detalhe.classList.remove('hidden');
     });
+
+    document.getElementById('icone-busca').innerHTML = icone('busca');
+    document.getElementById('icone-explorar').innerHTML = icone('explorar', 'w-4 h-4');
 
     montarFiltros();
     montarPins();

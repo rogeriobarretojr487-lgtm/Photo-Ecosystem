@@ -32,6 +32,9 @@ body {
   color: #94a3b8;
 }
 
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 .titulo {
   font-family: 'Playfair Display', serif;
   letter-spacing: -0.01em;
@@ -76,7 +79,9 @@ body {
   }
 
   /* Stories ocupa a altura da moldura, não a da janela. */
-  main.min-h-screen { min-height: 100%; }
+  main.h-screen {
+    height: 100%;
+  }
 }
 
 /* Malha de ruas do mapa (tela mapa.html) — desenhada em CSS, sem biblioteca externa. */

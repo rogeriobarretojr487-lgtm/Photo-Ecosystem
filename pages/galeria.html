@@ -57,8 +57,10 @@
         ? lista.map((f) => `
           <figure class="relative rounded-xl overflow-hidden">
             <img src="${f.foto}" alt="Foto em ${GALERIA.local}" class="w-full aspect-square object-cover">
-            <figcaption class="absolute bottom-0 inset-x-0 flex items-center justify-between px-3 py-2 text-xs text-white bg-black/40">
-              <button data-curtir="${f.id}">${f.curtido ? '❤️' : '\u{1F90D}'} Curtir</button>
+            <figcaption class="absolute bottom-0 inset-x-0 flex items-center justify-between px-3 py-2 text-xs text-white bg-gradient-to-t from-black/60 to-transparent">
+              <button data-curtir="${f.id}" class="flex items-center gap-1.5 ${f.curtido ? 'text-rose-400' : ''}">
+                ${icone('coracao', 'w-4 h-4', f.curtido)} Curtir
+              </button>
               <span>${f.curtidas}</span>
             </figcaption>
           </figure>`).join('')

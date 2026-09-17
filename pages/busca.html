@@ -19,7 +19,7 @@
   <main class="max-w-2xl mx-auto px-5 py-5">
 
     <label class="flex items-center gap-2 bg-white rounded-full px-4 py-3 shadow-sm">
-      <span class="text-slate-400">&#128269;</span>
+      <span id="icone-busca" class="text-slate-400"></span>
       <input id="busca" type="search" placeholder="Buscar lugares, usuários, pontos turísticos..."
              class="w-full outline-none text-sm placeholder:text-slate-400">
     </label>
@@ -55,7 +55,7 @@
       const sugestoes = SUGESTOES_BUSCA.filter((s) => combina(s, termo));
       document.getElementById('sugestoes').innerHTML = sugestoes.map((s) => `
         <li><a href="galeria.html" class="flex items-center gap-3 px-4 py-3 text-sm">
-          <span class="text-slate-400">&#128205;</span>${s}
+          <span class="text-slate-400">${icone('local')}</span>${s}
         </a></li>`).join('');
       document.getElementById('vazio-sugestoes').classList.toggle('hidden', sugestoes.length > 0);
 
@@ -72,6 +72,7 @@
       document.getElementById('vazio-usuarios').classList.toggle('hidden', usuarios.length > 0);
     }
 
+    document.getElementById('icone-busca').innerHTML = icone('busca');
     campo.addEventListener('input', montar);
     montar();
   </script>

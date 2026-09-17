@@ -24,9 +24,11 @@
         <a href="stories.html" class="text-sm text-jovi">Ver stories</a>
       </div>
       <div class="flex items-center gap-2">
-        <button id="voltar" class="bg-jovi text-white rounded-xl px-3 py-4 text-xs shrink-0">&#9664;&#9664;<br>Voltar</button>
-        <div id="locais" class="flex gap-4 overflow-x-auto scroll-smooth py-1"></div>
-        <button id="avancar" class="bg-jovi text-white rounded-xl px-3 py-4 text-xs shrink-0">&#9654;&#9654;<br>Avançar</button>
+        <button id="voltar" aria-label="Locais anteriores"
+                class="shrink-0 w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center hover:text-jovi"></button>
+        <div id="locais" class="flex-1 flex gap-4 overflow-x-auto scroll-smooth py-1 no-scrollbar"></div>
+        <button id="avancar" aria-label="Próximos locais"
+                class="shrink-0 w-8 h-8 rounded-full bg-white border border-slate-200 text-slate-500 flex items-center justify-center hover:text-jovi"></button>
       </div>
       <p id="filtro-aviso" class="hidden mt-3 text-sm text-slate-500"></p>
     </section>
@@ -63,19 +65,19 @@
             <span class="text-slate-400">•••</span>
           </div>
           <img src="${p.foto}" alt="Foto em ${p.localNome}" class="w-full aspect-[4/3] object-cover">
-          <div class="flex flex-wrap gap-x-4 gap-y-1 px-4 py-2 text-xs text-slate-500">
-            <span>&#128205; ${p.localNome}</span>
-            <span>&bull; ${p.distancia}</span>
-            <span>&bull; ${p.temperatura}</span>
-            <span>&bull; ${p.horario}</span>
+          <div class="flex flex-wrap gap-x-4 gap-y-1 px-4 py-2.5 text-xs text-slate-500">
+            <span class="flex items-center gap-1.5">${icone('local', 'w-3.5 h-3.5')} ${p.localNome}</span>
+            <span class="flex items-center gap-1.5">${icone('distancia', 'w-3.5 h-3.5')} ${p.distancia}</span>
+            <span class="flex items-center gap-1.5">${icone('temperatura', 'w-3.5 h-3.5')} ${p.temperatura}</span>
+            <span class="flex items-center gap-1.5">${icone('relogio', 'w-3.5 h-3.5')} ${p.horario}</span>
           </div>
-          <div class="flex items-center gap-5 px-4 py-3 text-sm">
-            <button data-curtir="${p.id}" class="flex items-center gap-1.5">
-              <span class="text-lg">${p.curtido ? '❤️' : '\u{1F90D}'}</span>
+          <div class="flex items-center gap-5 px-4 py-3 text-sm border-t border-slate-100">
+            <button data-curtir="${p.id}" class="flex items-center gap-2 ${p.curtido ? 'text-rose-500' : 'text-slate-500'}">
+              ${icone('coracao', 'w-5 h-5', p.curtido)}
               <span>${p.curtidas}</span>
             </button>
-            <span class="flex items-center gap-1.5 text-slate-500">&#128172; ${p.comentarios}</span>
-            <span class="flex items-center gap-1.5 text-slate-500">&#10150; ${p.compartilhamentos}</span>
+            <span class="flex items-center gap-2 text-slate-500">${icone('comentario')} ${p.comentarios}</span>
+            <span class="flex items-center gap-2 text-slate-500">${icone('compartilhar')} ${p.compartilhamentos}</span>
           </div>
         </article>`).join('');
     }
@@ -107,8 +109,12 @@
     });
 
     const locais = document.getElementById('locais');
-    document.getElementById('voltar').addEventListener('click', () => locais.scrollBy({ left: -200, behavior: 'smooth' }));
-    document.getElementById('avancar').addEventListener('click', () => locais.scrollBy({ left: 200, behavior: 'smooth' }));
+    const voltar = document.getElementById('voltar');
+    const avancar = document.getElementById('avancar');
+    voltar.innerHTML = icone('esquerda');
+    avancar.innerHTML = icone('direita');
+    voltar.addEventListener('click', () => locais.scrollBy({ left: -200, behavior: 'smooth' }));
+    avancar.addEventListener('click', () => locais.scrollBy({ left: 200, behavior: 'smooth' }));
 
     montarLocais();
     montarPosts();
