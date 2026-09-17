@@ -46,8 +46,8 @@ body {
   /* overflow hidden aqui é o que faz a rolagem acontecer dentro do celular:
      sem isso o navegador joga o overflow do body para a janela inteira. */
   html {
-    min-height: 100%;
-    overflow: auto;
+    height: 100%;
+    overflow: hidden;
     background: radial-gradient(circle at 50% 0%, #22304a, #0b1220 60%);
     display: flex;
     flex-direction: column;
@@ -55,7 +55,7 @@ body {
     /* safe center: centraliza, mas alinha ao topo quando não cabe, para nada ficar cortado. */
     justify-content: safe center;
     gap: 1.25rem;
-    padding: 3rem 1rem;
+    padding: 2rem 1rem;
   }
 
   /* Legenda sob o aparelho: dá respiro e contexto na versão de apresentação. */
@@ -67,14 +67,14 @@ body {
     text-transform: uppercase;
   }
 
-  /* html body: o Tailwind via CDN injeta o reset depois deste arquivo e zera a margem. */
-  /* Medidas reais de um iPhone 14/15. Janela baixa? A página rola, o aparelho não encolhe.
-     margin auto (em vez de justify-content) para o topo nunca ser cortado ao rolar. */
+  /* Tela interna com as medidas reais de um iPhone 14/15. O transform só reduz o
+     conjunto para caber na janela; as variáveis vêm do ajustarEscala() no app.js. */
   html body {
     flex: none;
     width: 390px;
     height: 844px;
-    margin: 0;
+    margin: var(--compensa-y, 0) var(--compensa-x, 0);
+    transform: scale(var(--escala, 1));
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;

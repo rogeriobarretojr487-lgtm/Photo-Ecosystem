@@ -27,6 +27,26 @@ function icone(nome, classe = 'w-5 h-5', preenchido = false) {
     stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONES[nome]}</svg>`;
 }
 
+// O aparelho tem sempre 390x844 (medidas reais) e é reduzido por transform para caber
+// na janela, sem barra de rolagem. A margem negativa compensa o espaço que o layout
+// continua reservando para o tamanho original.
+function ajustarEscala() {
+  const raiz = document.documentElement;
+  if (!matchMedia('(min-width: 768px)').matches) {
+    raiz.style.removeProperty('--escala');
+    raiz.style.removeProperty('--compensa-y');
+    raiz.style.removeProperty('--compensa-x');
+    return;
+  }
+  const escala = Math.min(1, (innerHeight - 104) / 864);
+  raiz.style.setProperty('--escala', escala);
+  raiz.style.setProperty('--compensa-y', `${(-864 * (1 - escala)) / 2}px`);
+  raiz.style.setProperty('--compensa-x', `${(-410 * (1 - escala)) / 2}px`);
+}
+
+ajustarEscala();
+addEventListener('resize', ajustarEscala);
+
 // Em janelas largas o espaço ao lado do aparelho vira apresentação da solução.
 // Fica fora do <body>, que no desktop é a moldura do celular.
 if (matchMedia('(min-width: 1100px)').matches) {
