@@ -48,24 +48,63 @@ body {
   html {
     height: 100%;
     overflow: hidden;
-    background: linear-gradient(160deg, #0f172a, #1e293b);
+    background: radial-gradient(circle at 50% -10%, #223049, #0b1220 65%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* html body: o Tailwind via CDN injeta o reset depois deste arquivo e zera a margem. */
+  /* html body: o Tailwind via CDN injeta o reset depois deste arquivo e zera a margem.
+     aspect-ratio mantém a proporção do aparelho quando a janela é baixa. */
   html body {
-    width: 390px;
-    height: min(844px, calc(100vh - 4rem));
-    margin: 2rem auto;
+    flex: none;
+    height: min(844px, calc(100vh - 3rem));
+    aspect-ratio: 390 / 844;
+    width: auto;
+    margin: 0;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
-    border: 12px solid #0b1220;
-    border-radius: 44px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+    border: 10px solid #05080f;
+    border-radius: 52px;
+    box-shadow: 0 0 0 2px #2b3a52, 0 45px 70px rgba(0, 0, 0, 0.55);
     scrollbar-width: none;
   }
 
   body::-webkit-scrollbar { display: none; }
+
+  /* Ilha dinâmica e barra de gesto: sticky para acompanharem a rolagem do aparelho. */
+  html body::before {
+    content: '';
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: block;
+    width: 108px;
+    height: 26px;
+    margin: 0 auto -26px;
+    background: #05080f;
+    border-radius: 0 0 16px 16px;
+  }
+
+  html body::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    display: block;
+    width: 130px;
+    height: 5px;
+    margin: -13px auto 8px;
+    border-radius: 999px;
+    background: rgba(100, 116, 139, 0.55);
+  }
+
+  /* Espaço para a ilha dinâmica não cobrir o cabeçalho.
+     O seletor [class] é para vencer o py-4 do Tailwind. */
+  html body > header[class] {
+    padding-top: 30px;
+  }
 
   /* Dentro da moldura o menu precisa acompanhar a rolagem do celular, não a da janela.
      O !important derruba o pb-28 do Tailwind, que só existe para o menu fixo do mobile. */

@@ -14,16 +14,16 @@
     <span class="wordmark">Photo ecosystem</span>
   </header>
 
-  <main class="max-w-2xl mx-auto px-6 pb-16 text-center">
+  <main class="max-w-2xl mx-auto pb-10">
 
-    <h1 id="titulo" class="titulo text-4xl md:text-5xl font-medium mt-10 mb-3"></h1>
-    <p id="descricao" class="text-slate-500 mb-8"></p>
+    <!-- Carrossel com scroll-snap: arrasta no celular e rola no desktop, sem biblioteca. -->
+    <div id="carrossel" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth"></div>
 
-    <img id="ilustracao" src="" alt="" class="w-full max-w-sm mx-auto rounded-3xl shadow-sm aspect-[4/3] object-cover">
+    <div id="pontos" class="flex justify-center gap-2 py-6"></div>
 
-    <div id="pontos" class="flex justify-center gap-2 py-8"></div>
-
-    <button id="avancar" class="bg-jovi text-white px-12 py-3 rounded-full text-lg hover:opacity-90">Começar</button>
+    <div class="px-6">
+      <a href="pages/feed.html" class="block text-center bg-jovi text-white px-12 py-3 rounded-full text-lg hover:opacity-90">Começar</a>
+    </div>
 
   </main>
 
@@ -46,35 +46,50 @@
       },
     ];
 
+    const carrossel = document.getElementById('carrossel');
+    const pontos = document.getElementById('pontos');
     let atual = 0;
+    let automatico;
 
-    function montar() {
-      const slide = SLIDES[atual];
-      document.getElementById('titulo').textContent = slide.titulo;
-      document.getElementById('descricao').textContent = slide.descricao;
-      document.getElementById('ilustracao').src = slide.imagem;
-      document.getElementById('ilustracao').alt = slide.titulo;
-      document.getElementById('avancar').textContent = atual === SLIDES.length - 1 ? 'Entrar' : 'Começar';
+    carrossel.innerHTML = SLIDES.map((s) => `
+      <section class="snap-center shrink-0 w-full px-6 text-center">
+        <h1 class="titulo text-3xl md:text-4xl font-medium mt-6 mb-3">${s.titulo}</h1>
+        <p class="text-slate-500 mb-6 min-h-12">${s.descricao}</p>
+        <img src="${s.imagem}" alt="${s.titulo}" class="w-full max-w-sm mx-auto rounded-3xl shadow-sm aspect-[4/3] object-cover">
+      </section>`).join('');
 
-      document.getElementById('pontos').innerHTML = SLIDES.map((_, i) => `
+    function montarPontos() {
+      pontos.innerHTML = SLIDES.map((_, i) => `
         <button data-slide="${i}" aria-label="Slide ${i + 1}"
-                class="w-2.5 h-2.5 rounded-full ${i === atual ? 'bg-jovi' : 'bg-slate-300'}"></button>`).join('');
+                class="h-2.5 rounded-full transition-all ${i === atual ? 'w-6 bg-jovi' : 'w-2.5 bg-slate-300'}"></button>`).join('');
     }
 
-    document.getElementById('avancar').addEventListener('click', () => {
-      if (atual === SLIDES.length - 1) return (location.href = 'pages/feed.html');
-      atual++;
-      montar();
+    function irPara(indice) {
+      atual = indice;
+      carrossel.scrollTo({ left: carrossel.clientWidth * indice, behavior: 'smooth' });
+      montarPontos();
+    }
+
+    // O indicador segue o arraste do usuário, não só os cliques.
+    carrossel.addEventListener('scroll', () => {
+      const indice = Math.round(carrossel.scrollLeft / carrossel.clientWidth);
+      if (indice === atual) return;
+      atual = indice;
+      montarPontos();
     });
 
-    document.getElementById('pontos').addEventListener('click', (e) => {
+    pontos.addEventListener('click', (e) => {
       const ponto = e.target.closest('[data-slide]');
       if (!ponto) return;
-      atual = Number(ponto.dataset.slide);
-      montar();
+      clearInterval(automatico);
+      irPara(Number(ponto.dataset.slide));
     });
 
-    montar();
+    // Passa sozinho até a pessoa interagir.
+    automatico = setInterval(() => irPara((atual + 1) % SLIDES.length), 5000);
+    carrossel.addEventListener('pointerdown', () => clearInterval(automatico));
+
+    montarPontos();
   </script>
 </body>
 </html>
