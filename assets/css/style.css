@@ -48,26 +48,35 @@ body {
   html {
     height: 100%;
     overflow: hidden;
-    background: radial-gradient(circle at 50% -10%, #223049, #0b1220 65%);
+    background: radial-gradient(circle at 50% 0%, #22304a, #0b1220 60%);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 1.25rem;
   }
 
-  /* html body: o Tailwind via CDN injeta o reset depois deste arquivo e zera a margem.
-     aspect-ratio mantém a proporção do aparelho quando a janela é baixa. */
+  /* Legenda sob o aparelho: dá respiro e contexto na versão de apresentação. */
+  html::after {
+    content: 'Photo ecosystem · Jovi';
+    color: #64748b;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* html body: o Tailwind via CDN injeta o reset depois deste arquivo e zera a margem. */
   html body {
     flex: none;
-    height: min(844px, calc(100vh - 3rem));
-    aspect-ratio: 390 / 844;
-    width: auto;
+    width: 400px;
+    height: min(760px, calc(100vh - 9rem));
     margin: 0;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
     border: 10px solid #05080f;
     border-radius: 52px;
-    box-shadow: 0 0 0 2px #2b3a52, 0 45px 70px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 0 0 2px #2b3a52, 0 45px 70px rgba(0, 0, 0, 0.55), 0 0 120px rgba(29, 74, 232, 0.22);
     scrollbar-width: none;
   }
 
@@ -120,6 +129,44 @@ body {
   /* Stories ocupa a altura da moldura, não a da janela. */
   main.h-screen {
     height: 100%;
+  }
+}
+
+#vitrine { display: none; }
+
+/* Janela larga: aparelho e texto lado a lado, em vez do celular sozinho no centro. */
+@media (min-width: 1100px) {
+  html {
+    flex-direction: row;
+    gap: 4.5rem;
+  }
+
+  html::after { display: none; }
+
+  #vitrine {
+    display: block;
+    width: 21rem;
+  }
+
+  #vitrine h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    line-height: 1.15;
+    color: #f8fafc;
+    margin: 1.25rem 0 0.75rem;
+  }
+
+  #vitrine p {
+    color: #94a3b8;
+    line-height: 1.65;
+  }
+
+  #vitrine .dica {
+    margin-top: 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #64748b;
   }
 }
 

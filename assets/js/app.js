@@ -27,6 +27,19 @@ function icone(nome, classe = 'w-5 h-5', preenchido = false) {
     stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONES[nome]}</svg>`;
 }
 
+// Em janelas largas o espaço ao lado do aparelho vira apresentação da solução.
+// Fica fora do <body>, que no desktop é a moldura do celular.
+if (matchMedia('(min-width: 1100px)').matches) {
+  const vitrine = document.createElement('aside');
+  vitrine.id = 'vitrine';
+  vitrine.innerHTML = `
+    <span class="logo">JOVI</span>
+    <h2>Photo ecosystem</h2>
+    <p>Um novo jeito de enxergar sua galeria. Suas fotos conectam histórias, lugares e pessoas.</p>
+    <p class="dica">Navegue pelo aparelho ao lado</p>`;
+  document.documentElement.appendChild(vitrine);
+}
+
 // Navegação inferior compartilhada: cada página só precisa ter <nav id="bottom-nav"></nav>.
 const NAV = [
   { href: 'feed.html', label: 'Home', icone: 'home' },
