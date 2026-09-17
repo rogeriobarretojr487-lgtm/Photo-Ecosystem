@@ -37,6 +37,48 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* No desktop o app aparece dentro de uma moldura de celular: a solução é mobile.
+   No celular nada disso vale e as telas seguem ocupando a tela toda. */
+@media (min-width: 768px) {
+  /* overflow hidden aqui é o que faz a rolagem acontecer dentro do celular:
+     sem isso o navegador joga o overflow do body para a janela inteira. */
+  html {
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(160deg, #0f172a, #1e293b);
+  }
+
+  /* html body: o Tailwind via CDN injeta o reset depois deste arquivo e zera a margem. */
+  html body {
+    width: 390px;
+    height: min(844px, calc(100vh - 4rem));
+    margin: 2rem auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    border: 12px solid #0b1220;
+    border-radius: 44px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar { display: none; }
+
+  /* Dentro da moldura o menu precisa acompanhar a rolagem do celular, não a da janela.
+     O !important derruba o pb-28 do Tailwind, que só existe para o menu fixo do mobile. */
+  html body {
+    padding-bottom: 0 !important;
+  }
+
+  #bottom-nav {
+    position: sticky;
+    bottom: 0;
+  }
+
+  /* Stories ocupa a altura da moldura, não a da janela. */
+  main.min-h-screen { min-height: 100%; }
+}
+
 /* Malha de ruas do mapa (tela mapa.html) — desenhada em CSS, sem biblioteca externa. */
 .mapa-ruas {
   background-image:
