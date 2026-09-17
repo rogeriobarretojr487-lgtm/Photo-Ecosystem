@@ -3,24 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa e GPS | Photo Ecosystem</title>
+  <title>Mapa | Photo Ecosystem</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-slate-50 text-slate-800 pb-20">
+<body class="bg-slate-50 text-slate-800 pb-28">
 
-  <header class="flex items-center justify-between px-6 py-4 bg-white border-b">
-    <a href="../index.html" class="font-bold text-jovi text-xl">JOVI</a>
-    <span class="text-slate-400">Photo ecosystem</span>
+  <header class="sticky top-0 z-10 bg-white border-b">
+    <div class="max-w-2xl mx-auto flex items-center justify-between px-5 py-4">
+      <a href="../index.html" class="font-bold text-jovi text-xl tracking-wide">JOVI</a>
+      <span class="text-slate-400 text-lg">Photo ecosystem</span>
+    </div>
   </header>
 
-  <main class="max-w-2xl mx-auto px-6 py-8">
-    <h1 class="text-2xl font-bold mb-4">Mapa e GPS</h1>
-    <p class="text-slate-500">Em construção.</p>
+  <main class="max-w-2xl mx-auto px-5 py-5">
+
+    <label class="flex items-center gap-2 bg-white rounded-full px-4 py-3 shadow-sm">
+      <span class="text-slate-400">&#128269;</span>
+      <input type="search" placeholder="Buscar lugares, usuários, pontos turísticos..."
+             class="w-full outline-none text-sm placeholder:text-slate-400">
+    </label>
+
+    <div id="filtros" class="flex gap-2 overflow-x-auto py-4"></div>
+
+    <!-- Mapa desenhado em CSS: o escopo da sprint não permite biblioteca de mapas. -->
+    <section id="mapa" class="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[3/4]">
+      <div class="absolute inset-0 mapa-ruas"></div>
+      <div class="absolute left-[8%] top-[10%] w-[38%] h-[26%] rounded-2xl bg-emerald-100"></div>
+      <div class="absolute right-[6%] bottom-[12%] w-[34%] h-[22%] rounded-2xl bg-emerald-100"></div>
+      <div class="absolute left-0 top-[58%] w-full h-6 bg-sky-100 -rotate-6"></div>
+      <div id="pins" class="absolute inset-0"></div>
+
+      <button id="explorar" class="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-jovi text-white rounded-full px-5 py-2.5 text-sm shadow-lg">
+        &#9678; Explorar nesta área
+      </button>
+    </section>
+
+    <div id="detalhe" class="hidden mt-4 bg-white rounded-2xl p-4 shadow-sm"></div>
+
   </main>
 
   <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 bg-white border-t"></nav>
 
+  <script src="../assets/js/dados.js"></script>
   <script src="../assets/js/app.js"></script>
+  <script>
+    const FILTROS = ['Todos', 'Populares', 'Recentes', 'Pôr do sol'];
+    let filtro = 'Todos';
+
+    function montarFiltros() {
+      document.getElementById('filtros').innerHTML = FILTROS.map((f) => `
+        <button data-filtro="${f}" class="shrink-0 rounded-full px-4 py-1.5 text-sm border ${
+          f === filtro ? 'bg-jovi text-white border-jovi' : 'bg-white text-slate-600 border-slate-200'
+        }">${f}</button>`).join('');
+    }
+
+    function montarPins() {
+      document.getElementById('pins').innerHTML = PINS_MAPA.map((p) => {
+        const posicao = `left:${p.x}%;top:${p.y}%`;
+        return p.tipo === 'cluster'
+          ? `<button data-pin="${p.id}" style="${posicao}" class="absolute -translate-x-1/2 -translate-y-1/2 bg-jovi text-white w-12 h-12 rounded-full font-semibold shadow-lg">${p.total}</button>`
+          : `<button data-pin="${p.id}" style="${posicao}" class="absolute -translate-x-1/2 -translate-y-1/2">
+               <img src="${p.avatar}" alt="${p.nome}" class="w-12 h-12 rounded-full object-cover ring-4 ring-white shadow-lg">
+             </button>`;
+      }).join('');
+    }
+
+    document.getElementById('filtros').addEventListener('click', (e) => {
+      const botao = e.target.closest('[data-filtro]');
+      if (!botao) return;
+      filtro = botao.dataset.filtro;
+      montarFiltros();
+    });
+
+    document.getElementById('pins').addEventListener('click', (e) => {
+      const botao = e.target.closest('[data-pin]');
+      if (!botao) return;
+      const pin = PINS_MAPA.find((p) => p.id === Number(botao.dataset.pin));
+      const detalhe = document.getElementById('detalhe');
+      detalhe.innerHTML = pin.tipo === 'cluster'
+        ? `<p class="font-semibold">${pin.total} fotos nesta área</p>
+           <p class="text-sm text-slate-500 mb-3">Filtro: ${filtro}</p>
+           <a href="galeria.html" class="text-sm text-jovi">Abrir galeria do local</a>`
+        : `<div class="flex items-center gap-3">
+             <img src="${pin.avatar}" alt="" class="w-12 h-12 rounded-full object-cover">
+             <div class="flex-1">
+               <p class="font-semibold">${pin.nome}</p>
+               <p class="text-sm text-slate-500">Está por perto agora</p>
+             </div>
+             <a href="perfil.html" class="text-sm text-jovi">Ver perfil</a>
+           </div>`;
+      detalhe.classList.remove('hidden');
+    });
+
+    document.getElementById('explorar').addEventListener('click', () => {
+      const detalhe = document.getElementById('detalhe');
+      const total = PINS_MAPA.filter((p) => p.tipo === 'cluster').reduce((soma, p) => soma + p.total, 0);
+      detalhe.innerHTML = `<p class="font-semibold">${total} fotos nesta área</p>
+        <p class="text-sm text-slate-500">Mostrando resultados de "${filtro}".</p>`;
+      detalhe.classList.remove('hidden');
+    });
+
+    montarFiltros();
+    montarPins();
+  </script>
 </body>
 </html>

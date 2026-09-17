@@ -7,20 +7,86 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-slate-50 text-slate-800 pb-20">
+<body class="bg-slate-50 text-slate-800 pb-28">
 
-  <header class="flex items-center justify-between px-6 py-4 bg-white border-b">
-    <a href="../index.html" class="font-bold text-jovi text-xl">JOVI</a>
-    <span class="text-slate-400">Photo ecosystem</span>
+  <header class="sticky top-0 z-10 bg-white border-b">
+    <div class="max-w-2xl mx-auto flex items-center justify-between px-5 py-4">
+      <a href="../index.html" class="font-bold text-jovi text-xl tracking-wide">JOVI</a>
+      <a href="config.html" class="text-slate-400 text-sm">Configurações</a>
+    </div>
   </header>
 
-  <main class="max-w-2xl mx-auto px-6 py-8">
-    <h1 class="text-2xl font-bold mb-4">Perfil</h1>
-    <p class="text-slate-500">Em construção.</p>
+  <main class="max-w-2xl mx-auto px-5 py-6">
+
+    <section class="flex items-center gap-4">
+      <img id="avatar" src="" alt="" class="w-20 h-20 rounded-full object-cover">
+      <div>
+        <h1 id="nome" class="text-xl font-bold"></h1>
+        <p id="usuario" class="text-slate-500 text-sm"></p>
+        <p id="cidade" class="text-slate-400 text-sm">&#128205; <span></span></p>
+      </div>
+    </section>
+
+    <section id="stats" class="flex gap-10 py-6"></section>
+
+    <button id="seguir" class="w-full bg-jovi text-white rounded-full py-2.5 font-medium">Seguir</button>
+
+    <section class="pt-8">
+      <div class="flex items-baseline justify-between mb-3">
+        <h2 class="font-semibold">Locais mais visitados</h2>
+        <a href="galeria.html" class="text-sm text-jovi">Ver todos</a>
+      </div>
+      <div id="locais" class="flex gap-4 overflow-x-auto pb-2"></div>
+    </section>
+
+    <section class="pt-8">
+      <div class="flex items-baseline justify-between mb-3">
+        <h2 class="font-semibold">Fotos compartilhadas</h2>
+        <a href="galeria.html" class="text-sm text-jovi">Ver todos</a>
+      </div>
+      <div id="fotos" class="grid grid-cols-3 gap-1"></div>
+    </section>
+
   </main>
 
   <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 bg-white border-t"></nav>
 
+  <script src="../assets/js/dados.js"></script>
   <script src="../assets/js/app.js"></script>
+  <script>
+    document.getElementById('avatar').src = PERFIL.avatar;
+    document.getElementById('avatar').alt = PERFIL.nome;
+    document.getElementById('nome').textContent = PERFIL.nome;
+    document.getElementById('usuario').textContent = PERFIL.usuario;
+    document.querySelector('#cidade span').textContent = PERFIL.cidade;
+
+    document.getElementById('stats').innerHTML = [
+      ['Posts', PERFIL.posts],
+      ['Seguindo', PERFIL.seguindo],
+      ['Seguidores', PERFIL.seguidores],
+    ].map(([rotulo, valor]) => `
+      <div>
+        <p class="text-xl font-bold">${valor}</p>
+        <p class="text-sm text-slate-500">${rotulo}</p>
+      </div>`).join('');
+
+    document.getElementById('locais').innerHTML = LOCAIS.slice(0, 4).map((l) => `
+      <a href="galeria.html" class="shrink-0 w-24 text-center">
+        <img src="${l.foto}" alt="${l.nome}" class="w-24 h-24 rounded-xl object-cover">
+        <span class="block text-xs text-slate-500 mt-1">${l.nome}</span>
+      </a>`).join('');
+
+    document.getElementById('fotos').innerHTML = GALERIA.fotos.map((f) => `
+      <a href="galeria.html"><img src="${f.foto}" alt="Foto em ${GALERIA.local}" class="aspect-square w-full object-cover"></a>`).join('');
+
+    const botaoSeguir = document.getElementById('seguir');
+    botaoSeguir.addEventListener('click', () => {
+      const seguindo = botaoSeguir.textContent === 'Seguindo';
+      botaoSeguir.textContent = seguindo ? 'Seguir' : 'Seguindo';
+      botaoSeguir.className = seguindo
+        ? 'w-full bg-jovi text-white rounded-full py-2.5 font-medium'
+        : 'w-full bg-white text-jovi border border-jovi rounded-full py-2.5 font-medium';
+    });
+  </script>
 </body>
 </html>

@@ -94,6 +94,33 @@ const SUGESTOES_BUSCA = [
   'Arquitetura',
 ];
 
+const GALERIA = {
+  local: 'Liberdade, São Paulo',
+  capa: 'https://picsum.photos/seed/liberdade/200/200',
+  distancia: '1.2 km',
+  fotosHoje: 243,
+  categorias: ['Recentes', 'Populares', 'Pôr do sol', 'Arquitetura'],
+  fotos: [
+    { id: 1, foto: 'https://picsum.photos/seed/lib-1/500/500', categoria: 'Recentes', curtidas: 125 },
+    { id: 2, foto: 'https://picsum.photos/seed/lib-2/500/500', categoria: 'Arquitetura', curtidas: 34 },
+    { id: 3, foto: 'https://picsum.photos/seed/lib-3/500/500', categoria: 'Populares', curtidas: 413 },
+    { id: 4, foto: 'https://picsum.photos/seed/lib-4/500/500', categoria: 'Arquitetura', curtidas: 83 },
+    { id: 5, foto: 'https://picsum.photos/seed/lib-5/500/500', categoria: 'Pôr do sol', curtidas: 271 },
+    { id: 6, foto: 'https://picsum.photos/seed/lib-6/500/500', categoria: 'Recentes', curtidas: 52 },
+    { id: 7, foto: 'https://picsum.photos/seed/lib-7/500/500', categoria: 'Pôr do sol', curtidas: 194 },
+    { id: 8, foto: 'https://picsum.photos/seed/lib-8/500/500', categoria: 'Populares', curtidas: 388 },
+  ],
+};
+
+// Posição dos pins em % da área do mapa (esquerda, topo).
+const PINS_MAPA = [
+  { id: 1, tipo: 'cluster', total: 37, x: 45, y: 48 },
+  { id: 2, tipo: 'cluster', total: 12, x: 70, y: 32 },
+  { id: 3, tipo: 'cluster', total: 8, x: 30, y: 62 },
+  { id: 4, tipo: 'usuario', nome: 'Renato Martins', avatar: 'https://i.pravatar.cc/100?img=12', x: 22, y: 34 },
+  { id: 5, tipo: 'usuario', nome: 'Juliana Costa', avatar: 'https://i.pravatar.cc/100?img=45', x: 68, y: 68 },
+];
+
 const PERFIL = {
   nome: 'Lucas Ferreira',
   usuario: '@lucasferr',

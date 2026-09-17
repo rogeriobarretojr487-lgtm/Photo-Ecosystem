@@ -9,17 +9,72 @@
 </head>
 <body class="bg-white text-slate-800">
 
-  <header class="flex items-center justify-between px-6 py-4">
-    <span class="font-bold text-jovi text-xl">JOVI</span>
-    <span class="text-slate-400">Photo ecosystem</span>
+  <header class="max-w-2xl mx-auto flex items-center justify-between px-6 py-4">
+    <span class="font-bold text-jovi text-xl tracking-wide">JOVI</span>
+    <span class="text-slate-400 text-lg">Photo ecosystem</span>
   </header>
 
-  <main class="max-w-3xl mx-auto px-6 py-16 text-center">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Compartilhe momentos.</h1>
-    <p class="text-slate-500 mb-10">Suas fotos conectam histórias, lugares e pessoas.</p>
-    <a href="pages/feed.html" class="inline-block bg-jovi text-white px-10 py-3 rounded-full hover:opacity-90">Começar</a>
+  <main class="max-w-2xl mx-auto px-6 pb-16 text-center">
+
+    <h1 id="titulo" class="text-3xl md:text-4xl font-bold mt-10 mb-3"></h1>
+    <p id="descricao" class="text-slate-500 mb-8"></p>
+
+    <img id="ilustracao" src="" alt="" class="w-full max-w-sm mx-auto rounded-3xl shadow-sm aspect-[4/3] object-cover">
+
+    <div id="pontos" class="flex justify-center gap-2 py-8"></div>
+
+    <button id="avancar" class="bg-jovi text-white px-12 py-3 rounded-full text-lg hover:opacity-90">Começar</button>
+
   </main>
 
-  <script src="assets/js/app.js"></script>
+  <script>
+    const SLIDES = [
+      {
+        titulo: 'Compartilhe momentos.',
+        descricao: 'Suas fotos conectam histórias, lugares e pessoas.',
+        imagem: 'https://picsum.photos/seed/onboarding-1/800/600',
+      },
+      {
+        titulo: 'Descubra quem está por perto.',
+        descricao: 'O mapa mostra usuários Jovi e pontos turísticos ao seu redor.',
+        imagem: 'https://picsum.photos/seed/onboarding-2/800/600',
+      },
+      {
+        titulo: 'Você no controle.',
+        descricao: 'Privacidade, segurança e a opção de não participar, sempre que quiser.',
+        imagem: 'https://picsum.photos/seed/onboarding-3/800/600',
+      },
+    ];
+
+    let atual = 0;
+
+    function montar() {
+      const slide = SLIDES[atual];
+      document.getElementById('titulo').textContent = slide.titulo;
+      document.getElementById('descricao').textContent = slide.descricao;
+      document.getElementById('ilustracao').src = slide.imagem;
+      document.getElementById('ilustracao').alt = slide.titulo;
+      document.getElementById('avancar').textContent = atual === SLIDES.length - 1 ? 'Entrar' : 'Começar';
+
+      document.getElementById('pontos').innerHTML = SLIDES.map((_, i) => `
+        <button data-slide="${i}" aria-label="Slide ${i + 1}"
+                class="w-2.5 h-2.5 rounded-full ${i === atual ? 'bg-jovi' : 'bg-slate-300'}"></button>`).join('');
+    }
+
+    document.getElementById('avancar').addEventListener('click', () => {
+      if (atual === SLIDES.length - 1) return (location.href = 'pages/feed.html');
+      atual++;
+      montar();
+    });
+
+    document.getElementById('pontos').addEventListener('click', (e) => {
+      const ponto = e.target.closest('[data-slide]');
+      if (!ponto) return;
+      atual = Number(ponto.dataset.slide);
+      montar();
+    });
+
+    montar();
+  </script>
 </body>
 </html>

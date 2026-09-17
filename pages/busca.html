@@ -3,24 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Busca e sugestões | Photo Ecosystem</title>
+  <title>Busca | Photo Ecosystem</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-slate-50 text-slate-800 pb-20">
+<body class="bg-slate-50 text-slate-800 pb-28">
 
-  <header class="flex items-center justify-between px-6 py-4 bg-white border-b">
-    <a href="../index.html" class="font-bold text-jovi text-xl">JOVI</a>
-    <span class="text-slate-400">Photo ecosystem</span>
+  <header class="sticky top-0 z-10 bg-white border-b">
+    <div class="max-w-2xl mx-auto flex items-center justify-between px-5 py-4">
+      <a href="../index.html" class="font-bold text-jovi text-xl tracking-wide">JOVI</a>
+      <span class="text-slate-400 text-lg">Photo ecosystem</span>
+    </div>
   </header>
 
-  <main class="max-w-2xl mx-auto px-6 py-8">
-    <h1 class="text-2xl font-bold mb-4">Busca e sugestões</h1>
-    <p class="text-slate-500">Em construção.</p>
+  <main class="max-w-2xl mx-auto px-5 py-5">
+
+    <label class="flex items-center gap-2 bg-white rounded-full px-4 py-3 shadow-sm">
+      <span class="text-slate-400">&#128269;</span>
+      <input id="busca" type="search" placeholder="Buscar lugares, usuários, pontos turísticos..."
+             class="w-full outline-none text-sm placeholder:text-slate-400">
+    </label>
+
+    <section class="pt-6">
+      <h2 class="font-semibold mb-2">Sugestões</h2>
+      <ul id="sugestoes" class="bg-white rounded-2xl divide-y"></ul>
+      <p id="vazio-sugestoes" class="hidden text-sm text-slate-400 py-3">Nenhuma sugestão encontrada.</p>
+    </section>
+
+    <section class="pt-6">
+      <h2 class="font-semibold mb-2">Usuários sugeridos</h2>
+      <ul id="usuarios" class="bg-white rounded-2xl divide-y"></ul>
+      <p id="vazio-usuarios" class="hidden text-sm text-slate-400 py-3">Nenhum usuário encontrado.</p>
+    </section>
+
   </main>
 
   <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 bg-white border-t"></nav>
 
+  <script src="../assets/js/dados.js"></script>
   <script src="../assets/js/app.js"></script>
+  <script>
+    const campo = document.getElementById('busca');
+
+    function combina(texto, termo) {
+      return texto.toLowerCase().includes(termo.toLowerCase());
+    }
+
+    function montar() {
+      const termo = campo.value.trim();
+
+      const sugestoes = SUGESTOES_BUSCA.filter((s) => combina(s, termo));
+      document.getElementById('sugestoes').innerHTML = sugestoes.map((s) => `
+        <li><a href="galeria.html" class="flex items-center gap-3 px-4 py-3 text-sm">
+          <span class="text-slate-400">&#128205;</span>${s}
+        </a></li>`).join('');
+      document.getElementById('vazio-sugestoes').classList.toggle('hidden', sugestoes.length > 0);
+
+      const usuarios = USUARIOS_SUGERIDOS.filter((u) => combina(u.usuario, termo) || combina(u.nome, termo));
+      document.getElementById('usuarios').innerHTML = usuarios.map((u) => `
+        <li class="flex items-center gap-3 px-4 py-3">
+          <img src="${u.avatar}" alt="" class="w-10 h-10 rounded-full object-cover">
+          <div class="flex-1">
+            <p class="text-sm font-medium">${u.usuario}</p>
+            <p class="text-xs text-slate-400">${u.nome}</p>
+          </div>
+          <a href="perfil.html" class="text-sm border border-slate-200 rounded-full px-4 py-1.5">Exibir</a>
+        </li>`).join('');
+      document.getElementById('vazio-usuarios').classList.toggle('hidden', usuarios.length > 0);
+    }
+
+    campo.addEventListener('input', montar);
+    montar();
+  </script>
 </body>
 </html>

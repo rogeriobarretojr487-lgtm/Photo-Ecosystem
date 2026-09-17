@@ -5,3 +5,12 @@
 .text-jovi { color: var(--jovi); }
 .bg-jovi { background-color: var(--jovi); }
 .ring-jovi { --tw-ring-color: var(--jovi); }
+.border-jovi { border-color: var(--jovi); }
+
+/* Malha de ruas do mapa (tela mapa.html) — desenhada em CSS, sem biblioteca externa. */
+.mapa-ruas {
+  background-image:
+    linear-gradient(#e2e8f0 3px, transparent 3px),
+    linear-gradient(90deg, #e2e8f0 3px, transparent 3px);
+  background-size: 64px 64px;
+}
