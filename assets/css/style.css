@@ -100,7 +100,8 @@ body {
     border-radius: 999px;
   }
 
-  html body::after {
+  /* Telas sem menu (stories) ganham a barra de gesto solta sobre o conteúdo. */
+  html body:not(:has(#bottom-nav))::after {
     content: '';
     position: sticky;
     bottom: 0;
@@ -108,9 +109,9 @@ body {
     display: block;
     width: 130px;
     height: 5px;
-    margin: -13px auto 8px;
+    margin: -18px auto 8px;
     border-radius: 999px;
-    background: rgba(100, 116, 139, 0.55);
+    background: rgba(226, 232, 240, 0.7);
   }
 
   /* Espaço para a ilha dinâmica não cobrir o cabeçalho.
@@ -125,9 +126,34 @@ body {
     padding-bottom: 0 !important;
   }
 
+  /* Coluna para o menu encostar na base do aparelho mesmo em telas com pouco conteúdo. */
+  html body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  html body > main {
+    flex: 1 1 auto;
+  }
+
   #bottom-nav {
     position: sticky;
     bottom: 0;
+    margin-top: auto;
+    padding-bottom: 18px;
+  }
+
+  /* Barra de gesto dentro do menu, no espaço reservado por esse padding. */
+  #bottom-nav::after {
+    content: '';
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.25);
   }
 
   /* Stories ocupa a altura da moldura, não a da janela. */
