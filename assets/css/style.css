@@ -1,6 +1,7 @@
 :root {
-  --jovi: #4a55e0;
+  --jovi: #1d4ae8;
 }
 
 .text-jovi { color: var(--jovi); }
 .bg-jovi { background-color: var(--jovi); }
+.ring-jovi { --tw-ring-color: var(--jovi); }

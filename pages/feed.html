@@ -7,20 +7,108 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body class="bg-slate-50 text-slate-800 pb-20">
+<body class="bg-slate-50 text-slate-800 pb-28">
 
-  <header class="flex items-center justify-between px-6 py-4 bg-white border-b">
-    <a href="../index.html" class="font-bold text-jovi text-xl">JOVI</a>
-    <span class="text-slate-400">Photo ecosystem</span>
+  <header class="sticky top-0 z-10 bg-white border-b">
+    <div class="max-w-2xl mx-auto flex items-center justify-between px-5 py-4">
+      <a href="../index.html" class="font-bold text-jovi text-xl tracking-wide">JOVI</a>
+      <span class="text-slate-400 text-lg">Photo ecosystem</span>
+    </div>
   </header>
 
-  <main class="max-w-2xl mx-auto px-6 py-8">
-    <h1 class="text-2xl font-bold mb-4">Feed</h1>
-    <p class="text-slate-500">Em construção.</p>
+  <main class="max-w-2xl mx-auto px-5">
+
+    <section class="py-5">
+      <h2 class="text-sm text-slate-500 mb-3">Locais em destaque</h2>
+      <div class="flex items-center gap-2">
+        <button id="voltar" class="bg-jovi text-white rounded-xl px-3 py-4 text-xs shrink-0">&#9664;&#9664;<br>Voltar</button>
+        <div id="locais" class="flex gap-4 overflow-x-auto scroll-smooth py-1"></div>
+        <button id="avancar" class="bg-jovi text-white rounded-xl px-3 py-4 text-xs shrink-0">&#9654;&#9654;<br>Avançar</button>
+      </div>
+      <p id="filtro-aviso" class="hidden mt-3 text-sm text-slate-500"></p>
+    </section>
+
+    <section id="posts" class="space-y-5 pb-5"></section>
+
   </main>
 
   <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 bg-white border-t"></nav>
 
+  <script src="../assets/js/dados.js"></script>
   <script src="../assets/js/app.js"></script>
+  <script>
+    let filtro = null;
+
+    function montarLocais() {
+      document.getElementById('locais').innerHTML = LOCAIS.map((l) => `
+        <button data-local="${l.id}" class="shrink-0 w-16 text-center">
+          <img src="${l.foto}" alt="${l.nome}" class="w-14 h-14 rounded-full object-cover mx-auto ring-2 ${l.id === filtro ? 'ring-jovi' : 'ring-transparent'}">
+          <span class="block text-xs text-slate-500 mt-1 truncate">${l.nome}</span>
+        </button>`).join('');
+    }
+
+    function montarPosts() {
+      const lista = filtro ? POSTS.filter((p) => p.local === filtro) : POSTS;
+      document.getElementById('posts').innerHTML = lista.map((p) => `
+        <article class="bg-white rounded-2xl overflow-hidden shadow-sm">
+          <div class="flex items-center gap-3 px-4 py-3">
+            <img src="${p.avatar}" alt="" class="w-10 h-10 rounded-full object-cover">
+            <div class="flex-1">
+              <p class="font-semibold text-sm">${p.autor}</p>
+              <p class="text-xs text-slate-400">${p.localNome} • ${p.tempo}</p>
+            </div>
+            <span class="text-slate-400">•••</span>
+          </div>
+          <img src="${p.foto}" alt="Foto em ${p.localNome}" class="w-full aspect-[4/3] object-cover">
+          <div class="flex flex-wrap gap-x-4 gap-y-1 px-4 py-2 text-xs text-slate-500">
+            <span>&#128205; ${p.localNome}</span>
+            <span>&bull; ${p.distancia}</span>
+            <span>&bull; ${p.temperatura}</span>
+            <span>&bull; ${p.horario}</span>
+          </div>
+          <div class="flex items-center gap-5 px-4 py-3 text-sm">
+            <button data-curtir="${p.id}" class="flex items-center gap-1.5">
+              <span class="text-lg">${p.curtido ? '❤️' : '\u{1F90D}'}</span>
+              <span>${p.curtidas}</span>
+            </button>
+            <span class="flex items-center gap-1.5 text-slate-500">&#128172; ${p.comentarios}</span>
+            <span class="flex items-center gap-1.5 text-slate-500">&#10150; ${p.compartilhamentos}</span>
+          </div>
+        </article>`).join('');
+    }
+
+    function avisoFiltro() {
+      const aviso = document.getElementById('filtro-aviso');
+      if (!filtro) return aviso.classList.add('hidden');
+      const nome = LOCAIS.find((l) => l.id === filtro).nome;
+      aviso.textContent = `Mostrando apenas ${nome} — toque de novo para ver tudo.`;
+      aviso.classList.remove('hidden');
+    }
+
+    document.getElementById('locais').addEventListener('click', (e) => {
+      const botao = e.target.closest('[data-local]');
+      if (!botao) return;
+      filtro = filtro === botao.dataset.local ? null : botao.dataset.local;
+      montarLocais();
+      montarPosts();
+      avisoFiltro();
+    });
+
+    document.getElementById('posts').addEventListener('click', (e) => {
+      const botao = e.target.closest('[data-curtir]');
+      if (!botao) return;
+      const post = POSTS.find((p) => p.id === Number(botao.dataset.curtir));
+      post.curtido = !post.curtido;
+      post.curtidas += post.curtido ? 1 : -1;
+      montarPosts();
+    });
+
+    const locais = document.getElementById('locais');
+    document.getElementById('voltar').addEventListener('click', () => locais.scrollBy({ left: -200, behavior: 'smooth' }));
+    document.getElementById('avancar').addEventListener('click', () => locais.scrollBy({ left: 200, behavior: 'smooth' }));
+
+    montarLocais();
+    montarPosts();
+  </script>
 </body>
 </html>
