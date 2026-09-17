@@ -1,0 +1,6 @@
+:root {
+  --jovi: #4a55e0;
+}
+
+.text-jovi { color: var(--jovi); }
+.bg-jovi { background-color: var(--jovi); }
