@@ -1,4 +1,3 @@
-
 CREATE TABLE T_COMENTARIO_STORY 
     ( 
      id_comentario NUMBER  NOT NULL , 
